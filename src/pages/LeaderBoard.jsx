@@ -129,7 +129,7 @@ const LeaderBoardPage = () => {
 
   const handleSubmit = async (lb) => {
     // Always fetch full user objects for top1/top2/top3 (works for both create and edit)
-    const [top1, top2, top3] = await Promise.all([
+     await Promise.all([
       fetchUserById(lb.top1),
       fetchUserById(lb.top2),
       fetchUserById(lb.top3),

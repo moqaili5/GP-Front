@@ -52,8 +52,7 @@ const MainPage = () => {
             ))}
           </div>
         </div>
-        {/* Right Column (Social + Events) */}
-<div className="hidden lg:flex flex-col gap-4 sm:gap-6">
+<div className="hidden lg:flex flex-col gap-4 sm:gap-6 sticky top-16 self-start overflow-y-auto max-h-[calc(100vh-4rem)]">
   <div className="shadow-md ">
     <SocialComponent />
   </div>
