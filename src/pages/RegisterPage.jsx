@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Register from "../components/Register";
-import Loading from "../components/loading/loading";
+import Loading from "../components/loading/Loading.jsx";
 
 function RegisterPage() {
   const [loading, setLoading] = useState(true);
