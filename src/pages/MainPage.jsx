@@ -59,7 +59,7 @@ const MainPage = () => {
   <div className="rounded-3xl shadow-md ">
     <EventList />
   </div>
-</div>
+</div>∆
       </div>
     </div>
   );
