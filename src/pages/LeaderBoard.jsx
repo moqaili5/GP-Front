@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LeaderBoard from "../components/LeaderBoard";
 import CreateLeaderBoard from "../components/CreateLeaderBoard";
 import axios from "axios";
-import Loading from "../components/loading/loading";
+import Loading from "../components/loading/Loading.jsx";
 
 const LeaderBoardPage = () => {
   const [leaderboards, setLeaderboards] = useState([]);

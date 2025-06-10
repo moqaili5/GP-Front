@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Login from '../components/Login';
-import Loading from '../components/loading/loading';
+import Loading from '../components/loading/Loading.jsx';
 
 function LoginPage() {
   const [loading, setLoading] = useState(true);

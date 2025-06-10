@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/NavBar';
 import ClubCard from '../components/ClubCard';
-import Loading from '../components/loading/loading';
+import Loading from '../components/loading/Loading.jsx';
 // import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

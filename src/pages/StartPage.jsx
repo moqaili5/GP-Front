@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Loading from "../components/loading/loading";
+import Loading from "../components/loading/Loading.jsx";
 
 function StartPage() {
   const navigate = useNavigate();

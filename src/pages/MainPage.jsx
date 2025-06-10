@@ -4,7 +4,7 @@ import Post from '../components/Post';
 import EventList from '../components/Eventscom';
 import SocialComponent from '../components/Clubs';
  import CreatePost from '../components/CreatePost';
-import Loading from '../components/loading/loading';
+import Loading from '../components/loading/Loading.jsx';
 const MainPage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);

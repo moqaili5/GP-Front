@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import EventCard from "../components/EventCard";
 import axios from "axios";
-import Loading from "../components/loading/loading";
+import Loading from "../components/loading/Loading.jsx";
 import CreateEvent from "../components/CreateEvent";
 
 function Events() {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavBar";
-import Loading from "../components/loading/loading";
+import Loading from "../components/loading/Loading.jsx";
 
 const AboutUs = () => {
   const navigate = useNavigate();

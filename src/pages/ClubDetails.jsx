@@ -6,7 +6,7 @@ import Post from "../components/Post";
 import CreatePost from "../components/CreatePost";
 import CreateEvent from "../components/CreateEvent";
 import EventCard from "../components/EventCard";
-import Loading from "../components/loading/loading";
+import Loading from "../components/loading/Loading.jsx";
 
 const ClubDetails = () => {
   const { id } = useParams();
