@@ -39,6 +39,8 @@ const ClubDetails = () => {
     axios
       .get(`${apiUrl}/clubs/${id}`)
       .then((res) => {
+        console.log("club details response:", res.data);
+
         setClub(res.data.data);
         setLoadingClub(false);
       })
@@ -46,6 +48,9 @@ const ClubDetails = () => {
         setError("حدث خطأ أثناء جلب بيانات النادي.");
         setLoadingClub(false);
       });
+
+    console.log("clubs details id:", id);
+    console.log("club:", club);
 
     axios
       .get(`${apiUrl}/posts/club/${id}`, {
@@ -66,44 +71,26 @@ const ClubDetails = () => {
       })
       .then((res) => {
         setEvents(res.data.data || []);
+        console.log("events response:", res.data);
+
         setLoadingEvents(false);
       })
       .catch(() => {
         setError("حدث خطأ أثناء جلب فعاليات النادي.");
         setLoadingEvents(false);
       });
+    console.log("events: ", events);
   }, [id, apiUrl, token]);
-
-  // Fetch join request status for this club
-  useEffect(() => {
-    if (!token) return;
-    const fetchMyRequests = async () => {
-      try {
-        const res = await axios.get(`${apiUrl}/clubs/my-requests`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const requests = res.data.data || res.data.requests || [];
-        const req = requests.find(
-          (r) =>
-            ((r.club?._id || r.club) === id) &&
-            ((r.student?._id || r.student) === userInfo._id)
-        );
-        if (req) {
-          setJoinStatus(req.status);
-        } else {
-          setJoinStatus(null);
-        }
-      } catch {
-        setJoinStatus(null);
-      }
-    };
-    fetchMyRequests();
-  }, [id, token, apiUrl, userInfo?._id]);
 
   // Fallback: check if user is in club.members if joinStatus is not set
   useEffect(() => {
     if (!token || !club || !userInfo) return;
-    if (joinStatus === "approved" || joinStatus === "pending" || joinStatus === "rejected") return;
+    if (
+      joinStatus === "approved" ||
+      joinStatus === "pending" ||
+      joinStatus === "rejected"
+    )
+      return;
     if (Array.isArray(club.members) && club.members.includes(userInfo._id)) {
       setJoinStatus("approved");
     }
@@ -140,7 +127,10 @@ const ClubDetails = () => {
       setJoinStatus(null);
       setClub((prev) =>
         prev
-          ? { ...prev, members: prev.members?.filter((m) => m !== userInfo._id) }
+          ? {
+              ...prev,
+              members: prev.members?.filter((m) => m !== userInfo._id),
+            }
           : prev
       );
     } catch {
@@ -189,7 +179,9 @@ const ClubDetails = () => {
 
   const handleEventUpdated = (updatedEvent) => {
     setEvents((events) =>
-      events.map((event) => (event._id === updatedEvent._id ? updatedEvent : event))
+      events.map((event) =>
+        event._id === updatedEvent._id ? updatedEvent : event
+      )
     );
   };
 
@@ -200,7 +192,8 @@ const ClubDetails = () => {
   const canEditPost =
     userInfo &&
     (userInfo.role === "system_responsible" ||
-      (userInfo.role === "club_responsible" && userInfo.managedClub === club?._id));
+      (userInfo.role === "club_responsible" &&
+        userInfo.managedClub === club?._id));
 
   // Button label, color, disabled logic, and action
   let buttonLabel = "طلب انضمام";
@@ -238,7 +231,10 @@ const ClubDetails = () => {
     <div className="min-h-screen bg-gray-100 w-full">
       <Navbar />
       <div className="h-6 sm:h-10 md:h-20"></div>
-      <div className="w-full flex flex-col items-center px-1 sm:px-4 md:px-8 lg:px-16" dir="rtl">
+      <div
+        className="w-full flex flex-col items-center px-1 sm:px-4 md:px-8 lg:px-16"
+        dir="rtl"
+      >
         {/* Club Card */}
         {club && (
           <div className="w-full bg-white rounded-3xl shadow-md overflow-hidden mb-10 max-w-2xl sm:max-w-3xl md:max-w-4xl">
@@ -254,7 +250,7 @@ const ClubDetails = () => {
               <div className="absolute bottom-0 right-4 sm:right-8 translate-y-1/2 z-10">
                 <img
                   src={
-                    club.profilePicture ||
+                    club.coverPicture ||
                     "https://www.shutterstock.com/image-vector/male-doctor-smiling-happy-face-600nw-2481032615.jpg"
                   }
                   alt="Profile"
@@ -267,7 +263,9 @@ const ClubDetails = () => {
                 <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 text-center sm:text-right break-words">
                   {club.name}
                 </h2>
-                <p className="text-base sm:text-lg text-gray-700 mb-2 text-right break-words">{club.description}</p>
+                <p className="text-base sm:text-lg text-gray-700 mb-2 text-right break-words">
+                  {club.description}
+                </p>
                 <div className="flex flex-col sm:flex-row justify-between text-gray-500 text-base mt-4 gap-2">
                   <span>الكلية: {club.college}</span>
                   <span>عدد الأعضاء: {club.members?.length || 0}</span>
@@ -302,7 +300,9 @@ const ClubDetails = () => {
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl shadow-lg p-2 sm:p-6 w-[95vw] max-w-lg">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg sm:text-xl font-bold text-blue-700">أعضاء النادي</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-blue-700">
+                  أعضاء النادي
+                </h2>
                 <button
                   className="text-gray-500 hover:text-gray-700 text-2xl"
                   onClick={() => setShowMembersModal(false)}
@@ -311,7 +311,9 @@ const ClubDetails = () => {
                 </button>
               </div>
               {loadingMembers ? (
-                <div className="text-center text-gray-600 py-8">جاري تحميل الأعضاء...</div>
+                <div className="text-center text-gray-600 py-8">
+                  جاري تحميل الأعضاء...
+                </div>
               ) : (
                 <div>
                   <div className="mb-2 text-gray-600 text-sm">
@@ -339,9 +341,11 @@ const ClubDetails = () => {
                         >
                           <img
                             src={
-                              member.profilePicture && member.profilePicture !== "default.jpg"
+                              member.profilePicture &&
+                              member.profilePicture !== "default.jpg"
                                 ? member.profilePicture
-                                : "https://ui-avatars.com/api/?name=" + encodeURIComponent(member.name)
+                                : "https://ui-avatars.com/api/?name=" +
+                                  encodeURIComponent(member.name)
                             }
                             alt={member.name}
                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border ml-2 sm:ml-4"
@@ -400,7 +404,9 @@ const ClubDetails = () => {
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4">
                 <button
                   className={`w-full sm:w-auto px-6 py-2 rounded-lg font-semibold transition ${
-                    !showEventForm ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                    !showEventForm
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700"
                   }`}
                   onClick={() => setShowEventForm(false)}
                 >
@@ -408,7 +414,9 @@ const ClubDetails = () => {
                 </button>
                 <button
                   className={`w-full sm:w-auto px-6 py-2 rounded-lg font-semibold transition ${
-                    showEventForm ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                    showEventForm
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700"
                   }`}
                   onClick={() => setShowEventForm(true)}
                 >
@@ -435,13 +443,17 @@ const ClubDetails = () => {
           {/* Events List - ONLY show when showEventForm is true and user has permission */}
           {canEditPost && showEventForm && (
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-blue-700">فعاليات النادي</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-blue-700">
+                فعاليات النادي
+              </h3>
               {loadingEvents ? (
                 <div className="max-w-4xl flex justify-center items-center text-lg text-gray-700">
                   <Loading />
                 </div>
               ) : events.length === 0 ? (
-                <div className="text-gray-500">لا توجد فعاليات لهذا النادي.</div>
+                <div className="text-gray-500">
+                  لا توجد فعاليات لهذا النادي.
+                </div>
               ) : (
                 events.map((event) => (
                   <EventCard
@@ -461,7 +473,9 @@ const ClubDetails = () => {
           {/* Posts List - ONLY show when showEventForm is false */}
           {!showEventForm && (
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-blue-700">منشورات النادي</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-blue-700">
+                منشورات النادي
+              </h3>
               {loadingPosts ? (
                 <div className="max-w-4xl flex justify-center items-center text-lg text-gray-700">
                   <Loading />
@@ -491,7 +505,9 @@ const ClubDetails = () => {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-[95vw] text-center">
-            <h2 className="text-2xl font-bold mb-4 text-green-700">تم إرسال الطلب بنجاح</h2>
+            <h2 className="text-2xl font-bold mb-4 text-green-700">
+              تم إرسال الطلب بنجاح
+            </h2>
             <p className="mb-6 text-gray-700">بانتظار موافقة مسؤول النادي</p>
             <button
               className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold"

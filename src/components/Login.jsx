@@ -54,7 +54,9 @@ const ForgotPasswordModal = ({ show, onClose }) => {
     setLoading(true);
     try {
       await axios.post(`${apiUrl}/auth/verifyResetPassword`, { resetCode });
-      setSuccessMsg("تم التحقق من الرمز بنجاح. يمكنك الآن تعيين كلمة مرور جديدة.");
+      setSuccessMsg(
+        "تم التحقق من الرمز بنجاح. يمكنك الآن تعيين كلمة مرور جديدة."
+      );
       setStep(3);
     } catch (err) {
       setApiError(
@@ -89,7 +91,10 @@ const ForgotPasswordModal = ({ show, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative" dir="rtl">
+      <div
+        className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative"
+        dir="rtl"
+      >
         <button
           className="absolute left-4 top-4 text-gray-500 hover:text-red-500 text-2xl"
           onClick={onClose}
@@ -97,13 +102,25 @@ const ForgotPasswordModal = ({ show, onClose }) => {
         >
           ×
         </button>
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-800">استعادة كلمة المرور</h2>
-        {apiError && <div className="text-red-500 text-sm mb-2 text-center">{apiError}</div>}
-        {successMsg && <div className="text-green-600 text-sm mb-2 text-center">{successMsg}</div>}
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-800">
+          استعادة كلمة المرور
+        </h2>
+        {apiError && (
+          <div className="text-red-500 text-sm mb-2 text-center">
+            {apiError}
+          </div>
+        )}
+        {successMsg && (
+          <div className="text-green-600 text-sm mb-2 text-center">
+            {successMsg}
+          </div>
+        )}
 
         {step === 1 && (
           <form onSubmit={handleSendEmail} className="space-y-4">
-            <label className="block text-base font-medium mb-1">البريد الإلكتروني الجامعي</label>
+            <label className="block text-base font-medium mb-1">
+              البريد الإلكتروني الجامعي
+            </label>
             <input
               type="email"
               dir="ltr"
@@ -125,7 +142,9 @@ const ForgotPasswordModal = ({ show, onClose }) => {
 
         {step === 2 && (
           <form onSubmit={handleVerifyCode} className="space-y-4">
-            <label className="block text-base font-medium mb-1">رمز التحقق</label>
+            <label className="block text-base font-medium mb-1">
+              رمز التحقق
+            </label>
             <input
               type="text"
               dir="rtl"
@@ -147,7 +166,9 @@ const ForgotPasswordModal = ({ show, onClose }) => {
 
         {step === 3 && (
           <form onSubmit={handleSetPassword} className="space-y-4">
-            <label className="block text-base font-medium mb-1">كلمة المرور الجديدة</label>
+            <label className="block text-base font-medium mb-1">
+              كلمة المرور الجديدة
+            </label>
             <input
               type="password"
               dir="rtl"
@@ -238,13 +259,10 @@ const LoginForm = () => {
     if (valid) {
       setLoading(true);
       try {
-        const res = await axios.post(
-          apiUrl + "/auth/login",
-          {
-            email: formData.email,
-            password: formData.password,
-          }
-        );
+        const res = await axios.post(apiUrl + "/auth/login", {
+          email: formData.email,
+          password: formData.password,
+        });
         if (res.data && res.data.token && res.data.data && res.data.data.user) {
           // Save all user info and token in localStorage
           localStorage.setItem(
@@ -270,7 +288,8 @@ const LoginForm = () => {
         } else if (
           err.response &&
           err.response.data &&
-          err.response.data.message === "Your account is inactive. Please contact the admin."
+          err.response.data.message ===
+            "Your account is inactive. Please contact the admin."
         ) {
           setApiError("حسابك غير مفعل. يرجى التواصل مع الإدارة.");
         } else {
@@ -284,8 +303,11 @@ const LoginForm = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen w-full px-4 sm:px-6 lg:px-8">
-      <ForgotPasswordModal show={showForgotModal} onClose={() => setShowForgotModal(false)} />
-      <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-4xl lg:max-w-6xl backdrop-blur-lg bg-white/30 p-4 sm:p-5 rounded-xl">
+      <ForgotPasswordModal
+        show={showForgotModal}
+        onClose={() => setShowForgotModal(false)}
+      />
+      <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-4xl lg:max-w-6xl backdrop-blur-lg bg-white/30 p-4 sm:p-5">
         {/* Form Section */}
         <div
           dir="rtl"
@@ -311,8 +333,8 @@ const LoginForm = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="مثال: 211057@ppu.edu.ps"
-                className="w-full p-2 sm:p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="211057@ppu.edu.ps :مثال"
+                className="w-full p-2 sm:p-3 text-right border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">{errors.email}</p>
