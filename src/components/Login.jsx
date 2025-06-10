@@ -5,6 +5,7 @@ import axios from "axios";
 // Forgot Password Modal Component
 const ForgotPasswordModal = ({ show, onClose }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  console.log("API URL:", apiUrl);
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [resetCode, setResetCode] = useState("");

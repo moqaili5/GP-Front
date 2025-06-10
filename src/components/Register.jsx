@@ -3,13 +3,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
   const apiUrl = import.meta.env.VITE_API_URL;
 const colleges = [
-  "Engineering",
-  "Information Technology",
-  "Applied Sciences",
-  "Administrative Sciences and Informatics",
-  "Applied Professions",
-  "Graduate Studies",
-  "Other",
+  "كلية الدراسات العليا",
+  "كلية الطب وعلوم الصحة",
+  "كلية طب الأسنان",
+  "كلية الهندسة والتكنولوجيا",
+  "كلية تكنولوجيا المعلومات وهندسة الحاسوب",
+  "كلية العلوم الإدارية ونظم المعلومات",
+  "كلية التمريض",
+  "كلية العلوم التطبيقية",
+  "كلية العلوم الإنسانية والتربوية",
+  "كلية الدراسات الثنائية",
+  "كلية المهن التطبيقية",
+  "مركز التميز والتعليم المستمر",
 ];
 
 const RegisterForm = () => {
