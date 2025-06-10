@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.start-page{
+    background-image: url('https://lh3.googleusercontent.com/gps-cs-s/AC9h4np6wt5y46o-_M0ruh9RwheLbPP0SWttSGe2EltLm13G3KJG5Y7wF0My1ABdv8QJe8p2wo_4D7tbFkKbyAAvik9pDLvJ4yz1GM3egKFstaqzzSkTX1a5q0IaljvyQIoPUCAHAb53=s1360-w1360-h1020-rw');
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+}
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.268);
+}
+.z-100 {
+    z-index: 100;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease;
+}
+.menu-bg {
+  background: rgba(255, 255, 255, 0.659);
+  backdrop-filter: blur(2px);
+  border-radius: 8px;
+}
+@media (max-width: 640px) {
+    body{
+        padding-top: 2rem;
+    }
+}
