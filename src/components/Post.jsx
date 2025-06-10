@@ -33,7 +33,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
   const [imagePreviews, setImagePreviews] = useState(post.images || []); // For previewing existing and new images
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
-  const [likes, setLikes] = useState(Array.isArray(post.likes) ? post.likes.length : post.likes || 0);
+  const [likes, setLikes] = useState(
+    Array.isArray(post.likes) ? post.likes.length : post.likes || 0
+  );
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState(post.comments || []);
   const [newComment, setNewComment] = useState("");
@@ -64,7 +66,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
   // Initialize isLiked based on whether the user's ID is in the likes array
   useEffect(() => {
     if (userInfo?._id && Array.isArray(post.likes)) {
-      const userHasLiked = post.likes.some(like => like.user?._id === userInfo._id);
+      const userHasLiked = post.likes.some(
+        (like) => like.user?._id === userInfo._id
+      );
       setIsLiked(userHasLiked);
     }
   }, [post.likes, userInfo?._id]);
@@ -97,7 +101,7 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
     setImages(newImages);
     const newPreviews = [
       ...imagePreviews,
-      ...files.map(file => URL.createObjectURL(file)),
+      ...files.map((file) => URL.createObjectURL(file)),
     ].slice(0, 5);
     setImagePreviews(newPreviews);
   };
@@ -155,10 +159,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
   const handleDeletePost = async () => {
     setLoading(true);
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/posts/${post._id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${post._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setLoading(false);
       setShowDeleteModal(false);
       setSuccessMsg("تم حذف المنشور بنجاح");
@@ -204,7 +207,7 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
       );
       setIsLiked(newIsLiked);
     } catch (err) {
-      console.error('خطأ أثناء الإعجاب:', err);
+      console.error("خطأ أثناء الإعجاب:", err);
     }
   };
 
@@ -245,9 +248,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
           },
         },
       ]);
-      setNewComment('');
+      setNewComment("");
     } catch (err) {
-      console.error('خطأ أثناء إضافة تعليق:', err);
+      console.error("خطأ أثناء إضافة تعليق:", err);
     }
   };
 
@@ -255,16 +258,13 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
     if (!commentToDelete) return;
     try {
       const authToken = token || userInfo?.token;
-      await axios.delete(
-        `${apiUrl}/comments/${commentToDelete._id}`,
-        {
-          headers: { Authorization: `Bearer ${authToken}` },
-        }
-      );
-      setComments(comments.filter(c => c._id !== commentToDelete._id));
+      await axios.delete(`${apiUrl}/comments/${commentToDelete._id}`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      setComments(comments.filter((c) => c._id !== commentToDelete._id));
       setShowDeleteCommentModal(false);
       setCommentToDelete(null);
-    } catch  {
+    } catch {
       setShowDeleteCommentModal(false);
       setCommentToDelete(null);
     }
@@ -281,11 +281,11 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
-      setComments(comments.map(c =>
-        c._id === commentId
-          ? { ...c, content: editingCommentContent }
-          : c
-      ));
+      setComments(
+        comments.map((c) =>
+          c._id === commentId ? { ...c, content: editingCommentContent } : c
+        )
+      );
       setEditingCommentId(null);
       setEditingCommentContent("");
     } catch {
@@ -295,15 +295,11 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
 
   // Image scroll logic
   const handlePrevImage = () => {
-    setCurrentImage((prev) =>
-      prev === 0 ? (post.images.length - 1) : prev - 1
-    );
+    setCurrentImage((prev) => (prev === 0 ? post.images.length - 1 : prev - 1));
   };
 
   const handleNextImage = () => {
-    setCurrentImage((prev) =>
-      prev === post.images.length - 1 ? 0 : prev + 1
-    );
+    setCurrentImage((prev) => (prev === post.images.length - 1 ? 0 : prev + 1));
   };
 
   // Comments logic: newest first, show/hide all
@@ -317,7 +313,10 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
   const isContentLong = post.content && post.content.length > 150;
 
   return (
-    <div dir="rtl" className="bg-white rounded-xl shadow-lg p-4 mb-4 w-full mx-auto relative">
+    <div
+      dir="rtl"
+      className="bg-white rounded-xl shadow-lg p-4 mb-4 w-full mx-auto relative"
+    >
       {/* Three Dots Menu */}
       {canEdit && !editing && (
         <div className="absolute top-3 left-3 z-10" ref={menuRef}>
@@ -328,7 +327,11 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
             aria-label="خيارات"
           >
             {/* Three dots icon */}
-            <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
               <circle cx="4" cy="10" r="2" />
               <circle cx="10" cy="10" r="2" />
               <circle cx="16" cy="10" r="2" />
@@ -372,8 +375,12 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-full text-center">
-            <h2 className="text-xl font-bold mb-4 text-red-700">تأكيد حذف المنشور</h2>
-            <p className="mb-6 text-gray-700">هل أنت متأكد أنك تريد حذف هذا المنشور؟</p>
+            <h2 className="text-xl font-bold mb-4 text-red-700">
+              تأكيد حذف المنشور
+            </h2>
+            <p className="mb-6 text-gray-700">
+              هل أنت متأكد أنك تريد حذف هذا المنشور؟
+            </p>
             <button
               className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold mx-2"
               onClick={handleDeletePost}
@@ -398,7 +405,7 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
           <textarea
             className="border rounded-lg p-2"
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             rows={3}
           />
           {/* Image previews and controls */}
@@ -407,7 +414,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
               {imagePreviews.map((img, idx) => (
                 <div key={idx} className="relative">
                   <img
-                    src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                    src={
+                      typeof img === "string" ? img : URL.createObjectURL(img)
+                    }
                     alt={`preview-${idx}`}
                     className="max-h-32 rounded-lg border border-gray-300"
                   />
@@ -431,9 +440,19 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
               className="hidden"
               disabled={images.length + imagePreviews.length >= 5}
             />
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
               <rect x="3" y="3" width="18" height="18" rx="2" fill="#22c55e" />
-              <path d="M8 17l2-2a2 2 0 0 1 2.83 0l2.17 2.17M8 13h.01M16 13h.01" stroke="#fff" strokeWidth="2" />
+              <path
+                d="M8 17l2-2a2 2 0 0 1 2.83 0l2.17 2.17M8 13h.01M16 13h.01"
+                stroke="#fff"
+                strokeWidth="2"
+              />
             </svg>
             أضف صور (حتى 5)
           </label>
@@ -463,9 +482,12 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
               <img
                 alt="Club Profile"
                 className="w-10 h-10 rounded-full mr-2"
-                src={post.club?.profilePicture || "https://u...content-available-to-author-only...s.com/api/?name=Club&background=random"}
+                src={
+                  post.club?.profilePicture ||
+                  "https://u...content-available-to-author-only...s.com/api/?name=Club&background=random"
+                }
               />
-              <div className='pr-4'>
+              <div className="pr-4">
                 <h3
                   className="text-base font-semibold text-gray-800 cursor-pointer hover:text-blue-600 transition"
                   onClick={() => navigate(`/clubs/${post.club?._id}`)}
@@ -473,19 +495,26 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                   {post.club?.name || "نادي عام"}
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  {new Date(post.createdAt).toLocaleString('ar-EG')}
+                  {new Date(post.createdAt).toLocaleString("ar-EG")}
                 </p>
               </div>
             </div>
           </div>
           {/* Content */}
           <div className="mb-3">
-            <p className={`text-sm text-gray-700 ${!isExpanded && isContentLong ? 'line-clamp-2' : ''}`}>
+            <p
+              className={`text-sm text-gray-700 ${
+                !isExpanded && isContentLong ? "line-clamp-2" : ""
+              }`}
+            >
               {linkify(post.content)}
             </p>
             {isContentLong && (
-              <button onClick={() => setIsExpanded(!isExpanded)} className="text-blue-600 text-sm font-medium mt-1">
-                {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-blue-600 text-sm font-medium mt-1"
+              >
+                {isExpanded ? "عرض أقل" : "عرض المزيد"}
               </button>
             )}
           </div>
@@ -500,8 +529,18 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                   style={{ display: post.images.length > 1 ? "block" : "none" }}
                   aria-label="الصورة السابقة"
                 >
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  <svg
+                    className="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
                 <img
@@ -513,7 +552,7 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                     height: "350px",
                     objectFit: "cover",
                     display: "block",
-                    margin: "0 auto"
+                    margin: "0 auto",
                   }}
                   onClick={() => setShowImagePreview(true)}
                 />
@@ -524,8 +563,18 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                   style={{ display: post.images.length > 1 ? "block" : "none" }}
                   aria-label="الصورة التالية"
                 >
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  <svg
+                    className="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                 </button>
               </div>
@@ -535,7 +584,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                   {post.images.map((_, idx) => (
                     <span
                       key={idx}
-                      className={`inline-block w-2 h-2 rounded-full ${currentImage === idx ? "bg-blue-600" : "bg-gray-300"}`}
+                      className={`inline-block w-2 h-2 rounded-full ${
+                        currentImage === idx ? "bg-blue-600" : "bg-gray-300"
+                      }`}
                     />
                   ))}
                 </div>
@@ -555,9 +606,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                       maxWidth: "90vw",
                       maxHeight: "90vh",
                       objectFit: "contain",
-                      background: "#fff"
+                      background: "#fff",
                     }}
-                    onClick={e => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
               )}
@@ -568,11 +619,13 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
             <button
               onClick={handleLikeToggle}
               className={`flex items-center text-blue-600 p-1 rounded-full transition duration-200 ${
-                isLiked ? 'bg-red-100' : 'hover:bg-gray-100'
+                isLiked ? "bg-red-100" : "hover:bg-gray-100"
               }`}
             >
               <svg
-                className={`w-5 h-5 mr-1 ${isLiked ? 'fill-red-500' : 'fill-none'} ml-1`}
+                className={`w-5 h-5 mr-1 ${
+                  isLiked ? "fill-red-500" : "fill-none"
+                } ml-1`}
                 viewBox="0 0 24 24"
                 xmlns="http://w...content-available-to-author-only...3.org/2000/svg"
               >
@@ -589,25 +642,29 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
             </button>
 
             <span className="text-blue-600 flex items-center text-lg">
-               <svg
-      className="w-6 h-6 ml-1"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-      />
-    </svg> {comments.length}
+              <svg
+                className="w-6 h-6 ml-1"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>{" "}
+              {comments.length}
             </span>
           </div>
 
           {/* Comment Section */}
           <div className="border-t pt-2">
-            <form onSubmit={handleCommentSubmit} className="flex items-center mb-2">
+            <form
+              onSubmit={handleCommentSubmit}
+              className="flex items-center mb-2"
+            >
               <input
                 type="text"
                 value={newComment}
@@ -630,24 +687,34 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                 onClick={() => setShowAllComments((prev) => !prev)}
                 type="button"
               >
-                {showAllComments ? "إخفاء التعليقات" : `عرض جميع التعليقات (${reversedComments.length})`}
+                {showAllComments
+                  ? "إخفاء التعليقات"
+                  : `عرض جميع التعليقات (${reversedComments.length})`}
               </button>
             )}
             {visibleComments.map((comment, index) => (
               <div key={comment._id || index} className="flex items-start mb-2">
                 <div className="bg-gray-100 p-2 rounded-lg flex items-start w-full gap-2 relative">
                   <img
-                    src={comment.author?.profilePicture || "https://u...content-available-to-author-only...s.com/api/?name=User&background=random"}
+                    src={
+                      comment.author?.profilePicture ||
+                      "https://u...content-available-to-author-only...s.com/api/?name=User&background=random"
+                    }
                     alt="User"
                     className="w-8 h-8 rounded-full mr-2"
                   />
                   <div className="flex flex-col flex-1 min-w-0">
-                    <span className="font-semibold text-sm">{comment.author?.name || "مستخدم"}</span>
+                    <span
+                      onClick={() => navigate(`/users/${comment.author?._id}`)}
+                      className="font-semibold text-sm cursor-pointer hover:text-blue-600 transition truncate"
+                    >
+                      {comment.author?.name || "مستخدم"}
+                    </span>
                     {/* Edit mode for comment */}
                     {editingCommentId === comment._id ? (
                       <form
                         className="flex flex-col sm:flex-row items-center w-full gap-2 mt-1"
-                        onSubmit={e => {
+                        onSubmit={(e) => {
                           e.preventDefault();
                           handleEditComment(comment._id);
                         }}
@@ -656,7 +723,9 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                         <input
                           className="border-2 border-yellow-400 focus:border-blue-500 rounded px-2 py-1 text-sm flex-1 transition"
                           value={editingCommentContent}
-                          onChange={e => setEditingCommentContent(e.target.value)}
+                          onChange={(e) =>
+                            setEditingCommentContent(e.target.value)
+                          }
                           autoFocus
                           style={{ minWidth: 0 }}
                         />
@@ -665,8 +734,18 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                             type="submit"
                             className="flex items-center gap-1 text-green-600 font-bold px-3 py-1 rounded hover:bg-green-50 transition border border-green-200"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M5 13l4 4L19 7"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
                             </svg>
                             حفظ
                           </button>
@@ -675,8 +754,18 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                             className="flex items-center gap-1 text-gray-500 px-3 py-1 rounded hover:bg-gray-100 transition border border-gray-200"
                             onClick={() => setEditingCommentId(null)}
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M6 18L18 6M6 6l12 12"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
                             </svg>
                             إلغاء
                           </button>
@@ -689,53 +778,64 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
                     )}
                   </div>
                   {/* Three Dots Menu for comment actions */}
-                  {comment.author?._id === userInfo?._id && editingCommentId !== comment._id && (
-                    <div
-                      className="absolute left-2 top-2 z-10"
-                      ref={el => (commentMenuRefs.current[comment._id] = el)}
-                    >
-                      <button
-                        className="p-1 rounded-full hover:bg-gray-200"
-                        onClick={() =>
-                          setShowCommentMenuId(showCommentMenuId === comment._id ? null : comment._id)
+                  {comment.author?._id === userInfo?._id &&
+                    editingCommentId !== comment._id && (
+                      <div
+                        className="absolute left-2 top-2 z-10"
+                        ref={(el) =>
+                          (commentMenuRefs.current[comment._id] = el)
                         }
-                        type="button"
-                        aria-label="خيارات التعليق"
                       >
-                        <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                          <circle cx="4" cy="10" r="2" />
-                          <circle cx="10" cy="10" r="2" />
-                          <circle cx="16" cy="10" r="2" />
-                        </svg>
-                      </button>
-                      {showCommentMenuId === comment._id && (
-                        <div className="absolute left-0 mt-2 w-28 bg-gray-900 text-white border rounded-xl shadow-lg z-20 py-2">
-                          <button
-                            className="block w-full text-right px-4 py-2 text-base hover:bg-gray-800"
-                            onClick={() => {
-                              setEditingCommentId(comment._id);
-                              setEditingCommentContent(comment.content);
-                              setShowCommentMenuId(null);
-                            }}
-                            type="button"
+                        <button
+                          className="p-1 rounded-full hover:bg-gray-200"
+                          onClick={() =>
+                            setShowCommentMenuId(
+                              showCommentMenuId === comment._id
+                                ? null
+                                : comment._id
+                            )
+                          }
+                          type="button"
+                          aria-label="خيارات التعليق"
+                        >
+                          <svg
+                            className="w-5 h-5 text-gray-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
                           >
-                            تعديل
-                          </button>
-                          <button
-                            className="block w-full text-right px-4 py-2 text-base hover:bg-gray-800"
-                            onClick={() => {
-                              setCommentToDelete(comment);
-                              setShowDeleteCommentModal(true);
-                              setShowCommentMenuId(null);
-                            }}
-                            type="button"
-                          >
-                            حذف
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                            <circle cx="4" cy="10" r="2" />
+                            <circle cx="10" cy="10" r="2" />
+                            <circle cx="16" cy="10" r="2" />
+                          </svg>
+                        </button>
+                        {showCommentMenuId === comment._id && (
+                          <div className="absolute left-0 mt-2 w-28 bg-gray-900 text-white border rounded-xl shadow-lg z-20 py-2">
+                            <button
+                              className="block w-full text-right px-4 py-2 text-base hover:bg-gray-800"
+                              onClick={() => {
+                                setEditingCommentId(comment._id);
+                                setEditingCommentContent(comment.content);
+                                setShowCommentMenuId(null);
+                              }}
+                              type="button"
+                            >
+                              تعديل
+                            </button>
+                            <button
+                              className="block w-full text-right px-4 py-2 text-base hover:bg-gray-800"
+                              onClick={() => {
+                                setCommentToDelete(comment);
+                                setShowDeleteCommentModal(true);
+                                setShowCommentMenuId(null);
+                              }}
+                              type="button"
+                            >
+                              حذف
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                 </div>
               </div>
             ))}
@@ -743,8 +843,12 @@ const Post = ({ post, token, canEdit, onPostUpdated, onPostDeleted }) => {
             {showDeleteCommentModal && (
               <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
                 <div className="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-full text-center">
-                  <h2 className="text-xl font-bold mb-4 text-red-700">تأكيد حذف التعليق</h2>
-                  <p className="mb-6 text-gray-700">هل أنت متأكد أنك تريد حذف هذا التعليق؟</p>
+                  <h2 className="text-xl font-bold mb-4 text-red-700">
+                    تأكيد حذف التعليق
+                  </h2>
+                  <p className="mb-6 text-gray-700">
+                    هل أنت متأكد أنك تريد حذف هذا التعليق؟
+                  </p>
                   <button
                     className="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold mx-2"
                     onClick={handleDeleteComment}

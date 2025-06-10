@@ -14,14 +14,14 @@ import EventDetails from "./pages/EventDetails";
 import ClubDetails from "./pages/ClubDetails";
 import Navbar from "./components/NavBar";
 import AboutUs from "./pages/AboutUs";
+import UserProfile from "./pages/UserProfile";
+
 // Layout for private pages with Navbar
 function PrivateLayout({ children }) {
   return (
     <div className="bg-cover bg-center min-h-screen flex flex-col items-center w-full">
       <Navbar />
-      <div className="w-full flex flex-col items-center">
-        {children}
-      </div>
+      <div className="w-full flex flex-col items-center">{children}</div>
     </div>
   );
 }
@@ -36,6 +36,15 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/validation" element={<EmailValidation />} />
+        <Route
+          path="/users/:userId"
+          element={
+            <PrivateLayout>
+              <UserProfile />
+            </PrivateLayout>
+          }
+        />
+
         {/* Private routes (with Navbar) */}
         <Route
           path="/home"
